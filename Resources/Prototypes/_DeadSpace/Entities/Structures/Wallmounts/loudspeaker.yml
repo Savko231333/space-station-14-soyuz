@@ -1,0 +1,74 @@
+- type: entity
+  id: LoudspeakerBase
+  name: громкоговоритель
+  description: Громкоговоритель, издаёт разные громкие звуки. Вероятно, пропаганду.
+  abstract: true
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      light:
+        shape:
+          !type:PhysShapeCircle
+          radius: 5
+        hard: false
+        mask:
+        - GhostImpassable
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,-0.2,-0.15"
+        density: 190
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WallMount
+  - type: Transform
+    anchored: true
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _DeadSpace/Structures/Wallmounts/loudspeaker.rsi
+    state: loudspeaker
+  - type: Appearance
+  - type: Destructible
+    thresholds:
+      - trigger:
+          !type:DamageTrigger
+          damage: 200
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+      - trigger:
+          !type:DamageTrigger
+          damage: 100
+        behaviors:
+          - !type:DoActsBehavior
+            acts: [ "Destruction" ]
+          - !type:PlaySoundBehavior
+            sound:
+              collection: MetalBreak
+              params:
+                volume: -8
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+
+- type: entity
+  parent: LoudspeakerBase
+  id: Loudspeaker
+  name: громкоговоритель
+  description: Громкоговоритель, издаёт разные громкие звуки. Вероятно, пропаганду.
+  components:
+  - type: AmbientSound
+    volume: -11
+    range: 5
+    sound:
+      path: /Audio/_DeadSpace/Ambience/SoyuzPropaganda/moscow_may.ogg
